@@ -48,6 +48,7 @@ export interface FloatingProps extends PropsWithChildren, Omit<ComponentProps<'d
   theme: FlowbiteFloatingTheme;
   trigger?: 'hover' | 'click';
   minWidth?: number;
+  openState?: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
 }
 
 /**
@@ -65,6 +66,7 @@ export const Floating: FC<FloatingProps> = ({
   theme,
   trigger = 'hover',
   minWidth,
+    openState,
   ...props
 }) => {
   const arrowRef = useRef<HTMLDivElement>(null);
@@ -88,10 +90,10 @@ export const Floating: FC<FloatingProps> = ({
   } = floatingTooltip;
 
   const { getFloatingProps, getReferenceProps } = useInteractions([
-    useClick(context, { enabled: trigger === 'click' }),
+    useClick(context, { enabled: openState === undefined ? trigger === 'click': undefined }),
     useFocus(context),
     useHover(context, {
-      enabled: trigger === 'hover',
+      enabled: openState === undefined? trigger === 'hover' : undefined,
       handleClose: safePolygon(),
     }),
     useRole(context, { role: 'tooltip' }),
