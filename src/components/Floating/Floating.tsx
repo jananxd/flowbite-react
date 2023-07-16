@@ -70,10 +70,11 @@ export const Floating: FC<FloatingProps> = ({
   ...props
 }) => {
   const arrowRef = useRef<HTMLDivElement>(null);
-  const [open, setOpen] = openState ?? useState(false)
+  const defaultOpen = useState(false)
+  const [open, setOpen] = openState ?? defaultOpen;
 
   const floatingTooltip = useFloating<HTMLElement>({
-    middleware: getMiddleware({ arrowRef, placement }),
+    middleware: getMiddleware({ arrowRef, placement,disabledPlacement: openState !== undefined }),
     onOpenChange: setOpen,
     open,
     placement: getPlacement({ placement }),

@@ -8,14 +8,19 @@ import type { RefObject } from 'react';
 export const getMiddleware = ({
   arrowRef,
   placement,
+                                disabledPlacement
 }: {
   arrowRef: RefObject<HTMLDivElement>;
   placement: 'auto' | Placement;
+  disabledPlacement?: boolean;
 }): Middleware[] => {
   const middleware = [];
 
   middleware.push(offset(8));
-  middleware.push(placement === 'auto' ? autoPlacement() : flip());
+  if (!disabledPlacement ) {
+    middleware.push(placement === 'auto' ? autoPlacement() : flip());
+  }
+
   middleware.push(shift({ padding: 8 }));
 
   if (arrowRef.current) {
