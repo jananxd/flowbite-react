@@ -66,11 +66,11 @@ export const Floating: FC<FloatingProps> = ({
   theme,
   trigger = 'hover',
   minWidth,
-    openState,
+    openState = useState(false),
   ...props
 }) => {
   const arrowRef = useRef<HTMLDivElement>(null);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = openState
 
   const floatingTooltip = useFloating<HTMLElement>({
     middleware: getMiddleware({ arrowRef, placement }),
