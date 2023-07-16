@@ -16,6 +16,7 @@ export interface TooltipProps extends PropsWithChildren<Omit<ComponentProps<'div
   style?: 'dark' | 'light' | 'auto';
   theme?: DeepPartial<FlowbiteTooltipTheme>;
   trigger?: 'hover' | 'click';
+  openState?: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
 }
 
 /**
@@ -31,6 +32,7 @@ export const Tooltip: FC<TooltipProps> = ({
   style = 'dark',
   theme: customTheme = {},
   trigger = 'hover',
+    openState,
   ...props
 }) => {
   const theme = mergeDeep(useTheme().theme.tooltip, customTheme);
@@ -45,6 +47,7 @@ export const Tooltip: FC<TooltipProps> = ({
       theme={theme}
       trigger={trigger}
       className={className}
+      openState={openState}
       {...props}
     >
       {children}

@@ -66,11 +66,11 @@ export const Floating: FC<FloatingProps> = ({
   theme,
   trigger = 'hover',
   minWidth,
-    openState = useState(false),
+    openState,
   ...props
 }) => {
   const arrowRef = useRef<HTMLDivElement>(null);
-  const [open, setOpen] = openState
+  const [open, setOpen] = openState ?? useState(false)
 
   const floatingTooltip = useFloating<HTMLElement>({
     middleware: getMiddleware({ arrowRef, placement }),
@@ -90,10 +90,10 @@ export const Floating: FC<FloatingProps> = ({
   } = floatingTooltip;
 
   const { getFloatingProps, getReferenceProps } = useInteractions([
-    useClick(context, { enabled: openState === undefined ? trigger === 'click': undefined }),
+    useClick(context, { enabled: openState === undefined ? trigger === 'click': false }),
     useFocus(context),
     useHover(context, {
-      enabled: openState === undefined? trigger === 'hover' : undefined,
+      enabled: openState === undefined? trigger === 'hover' : false,
       handleClose: safePolygon(),
     }),
     useRole(context, { role: 'tooltip' }),
