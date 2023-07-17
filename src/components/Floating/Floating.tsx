@@ -49,6 +49,7 @@ export interface FloatingProps extends PropsWithChildren, Omit<ComponentProps<'d
   trigger?: 'hover' | 'click';
   minWidth?: number;
   openState?: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
+  disabledTrigger?: boolean;
 }
 
 /**
@@ -67,6 +68,7 @@ export const Floating: FC<FloatingProps> = ({
   trigger = 'hover',
   minWidth,
     openState,
+    disabledTrigger = false,
   ...props
 }) => {
   const arrowRef = useRef<HTMLDivElement>(null);
@@ -74,7 +76,7 @@ export const Floating: FC<FloatingProps> = ({
   const [open, setOpen] = openState ?? defaultOpen;
 
   const floatingTooltip = useFloating<HTMLElement>({
-    middleware: getMiddleware({ arrowRef, placement,disabledPlacement: openState !== undefined }),
+    middleware: getMiddleware({ arrowRef, placement,disabledPlacement: disabledTrigger }),
     onOpenChange: setOpen,
     open,
     placement: getPlacement({ placement }),
@@ -91,10 +93,10 @@ export const Floating: FC<FloatingProps> = ({
   } = floatingTooltip;
 
   const { getFloatingProps, getReferenceProps } = useInteractions([
-    useClick(context, { enabled: openState === undefined ? trigger === 'click': false }),
+    useClick(context, { enabled: !disabledTrigger && trigger === 'click' }),
     useFocus(context),
     useHover(context, {
-      enabled: openState === undefined? trigger === 'hover' : false,
+      enabled: !disabledTrigger && trigger === 'hover',
       handleClose: safePolygon(),
     }),
     useRole(context, { role: 'tooltip' }),
